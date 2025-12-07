@@ -1,0 +1,57 @@
+#!/bin/bash
+# Written by LLM
+
+if [ -z "$1" ]; then
+    echo "Usage: $0 <day_number>"
+    echo "Example: $0 3"
+    exit 1
+fi
+
+DAY=$(printf "%02d" $1)
+mkdir -p "$DAY"
+
+cat > "$DAY/Makefile" << 'EOF'
+# Minimal Makefile to compile main.c into a binary
+
+CC      ?= cc
+CFLAGS  ?= -Wall -Wextra -O2 -std=c11
+
+SRC     := main.c
+BIN     := main
+
+.PHONY: all clean run
+
+all: $(BIN)
+
+$(BIN): $(SRC)
+	$(CC) $(CFLAGS) $(SRC) -o $(BIN)
+
+run: $(BIN)
+	./$(BIN) < input.txt
+
+clean:
+	rm -f $(BIN)
+EOF
+
+cat > "$DAY/main.c" << 'EOF'
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int main() {
+    return EXIT_SUCCESS;
+}
+EOF
+
+touch "$DAY/input.txt"
+
+echo "Day $DAY setup complete!"
+echo "  - Created $DAY/main.c"
+echo "  - Created $DAY/Makefile"
+echo "  - Created $DAY/input.txt"
+echo ""
+echo "Next steps:"
+echo "  1. Add your puzzle input to $DAY/input.txt"
+echo "  2. Edit $DAY/main.c"
+echo "  3. Run 'make -C $DAY' to compile"
+echo "  4. Run 'make -C $DAY run' to execute"
